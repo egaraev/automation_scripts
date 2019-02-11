@@ -1,0 +1,87 @@
+#!/bin/bash
+
+if [ -f /etc/redhat-release ]; then
+echo "=================================="
+#Put code for Redhat here
+echo `hostname`
+grep "^[^*#]" /etc/pam_ldap.conf | grep group
+grep "^[^*#]" /etc/pam_ldap.conf | grep pam_filter
+grep "^[^*#]" /etc/nslcd.conf | grep Auth
+grep "^[^*#]" /etc/nslcd.conf | grep group
+
+echo "----------------------------------"
+cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}' | cut -d/ -f4- | tail -n +$((2+1))
+if [ -f "`cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}'  | grep CUST`" ]; then
+echo "The server has custom template"
+grep "^[^*#]" `cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}'  | grep CUST`
+else
+echo "No custom templates used in sudo"
+fi
+
+
+
+
+
+
+
+echo "=================================="
+elif [ -f /etc/SuSE-release ]; then
+echo "=================================="
+#Put code for Suse here
+echo `hostname`
+grep "^[^*#]" /etc/ldap.conf | grep nss_base_group
+grep "^[^*#]" /etc/ldap.conf | grep pam_filter
+
+echo "----------------------------------"
+echo "Sudo templates used here"
+cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}' | cut -d/ -f4- | tail -n +$((2+1))
+if [ -f "`cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}'  | grep CUST`" ]; then
+echo "The server has custom template"
+grep "^[^*#]" `cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}'  | grep CUST`
+else
+echo "No custom templates used in sudo"
+fi
+
+
+
+
+
+
+echo "=================================="
+elif [ uname == 'AIX' ]; then
+#Put code for AIX here
+echo "=================================="
+echo `hostname`
+grep "^[^*#]" /etc/security/ldap/ldap.cfg | grep groupbase
+
+echo "----------------------------------"
+echo "Sudo templates used here"
+cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}' | cut -d/ -f4- | tail -n +$((2+1))
+if [ -f "`cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}'  | grep CUST`" ]; then
+echo "The server has custom template"
+grep "^[^*#]" `cat /etc/sudoers | grep '#include /etc/sudoers.d' | awk '{print $2}'  | grep CUST`
+else
+echo "No custom templates used in sudo"
+fi
+
+echo "=================================="
+
+
+
+
+
+
+
+
+else
+echo "=================================="
+#Put code for other UNIX
+echo `hostname`
+
+echo "----------------------------------"
+
+
+echo "=================================="
+fi
+
+

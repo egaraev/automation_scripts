@@ -1,0 +1,78 @@
+#!/usr/bin/expect
+#exp_internal 1
+set timeout 600
+set user [lindex $argv 0]
+set password [lindex $argv 1]
+set host [lindex $argv 2]
+set prompt "(%|#|:|>|\\$ )"
+
+#Information banner
+send_user "\n\n########### Running script on host : ${host} ###########\n"
+
+#Starting SSH connection
+spawn ssh ${user}@${host} 
+
+#Check if connection works or not
+expect {
+		timeout { send_user "\nFailed connect to the host"; exit 1 }
+
+		eof { send_user "\nSSH failure for ${host}"}
+
+#Sending password
+
+		"*assword:" {
+			send "${password}\r"
+		}
+}
+
+#Doing SUDO
+expect -re $prompt 
+                 send "sudo su -\r"
+	       	expect {
+                         "*assword*" {
+                                       send "${password}\r"   
+                                      }
+                        }
+
+#Sending commands
+expect { 
+		 "*#" {
+				send "chmod +x /home/eldar/swap.sh; /home/eldar/swap.sh\r"
+					
+			expect "x#"		 {
+					 send "exit\r" 
+					  	 }	
+			}
+
+
+
+
+		"*:" {
+				send "chmod +x /home/eldar/swap.sh; /home/eldar/swap.sh\r"
+ 
+                        expect "x:"		 {
+                                 
+                                         send "exit\r" 
+                                   		 }    
+			}		
+	}
+#Exiting from servers
+			expect { 
+				"*@*" { 
+					send "exit\r"
+ 					}
+				"*:" { 
+					send "exit\r"
+				     }
+
+				"logout" { 
+                			send "exit\r" 
+        			     }
+
+				"*$" {
+                                        send "exit\r"
+                                     }
+
+
+}
+

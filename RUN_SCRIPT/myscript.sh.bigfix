@@ -1,0 +1,334 @@
+#!/bin/bash
+
+if [ -f /etc/redhat-release ]; then
+echo "=================================="
+#Put code for Redhat here
+echo `hostname`
+echo `ifconfig -a | grep cast | awk '{print $2}'`
+if [ -f /opt/BESClient/bin/BESClient ]; then
+	echo "Besclient is installed in the system"
+	if ps ax | grep -v grep | grep BESClient> /dev/null; then
+	echo "Besclient is up and running"
+	#Port checking section start
+                perl -  <<'__HERE__'
+                use IO::Socket;
+                # flush the print buffer immediately
+                $| = 1;
+                # Get command line parameters
+                $target = "129.39.145.237" ;
+                $port = 52311 ;
+                # Connect to host/port
+                $socket = IO::Socket::INET->new(PeerAddr => $target , PeerPort => $port , Proto => 'tcp' , Timeout => 2);
+                # Check connection
+                if( $socket )
+                {
+                        #print "Port $port is open.\n" ;
+                        $socket->close();
+                        exit( 0 );
+                }       
+                else
+                {
+                #print "Port $port is closed or filtered.\n" ;
+                exit( 1 );
+                }
+__HERE__
+                if [ $? -eq 0 ]
+                then
+                echo "Telnet is working"
+                else
+                echo "Telnet is not working, please check network"
+                fi
+#End of port checking section
+	
+
+	else
+	echo "Besclient is not running"
+	/etc/init.d/besclient start
+		if [ $? -eq 0 ]; then
+                echo "Besclient has been started"
+                else
+                echo "Besclient CANNOT be started"
+                fi
+	sleep 5
+	#Port checking section start
+                perl -  <<'__HERE__'
+                use IO::Socket;
+                # flush the print buffer immediately
+                $| = 1;
+                # Get command line parameters
+                $target = "129.39.145.237" ;
+                $port = 52311 ;
+                # Connect to host/port
+                $socket = IO::Socket::INET->new(PeerAddr => $target , PeerPort => $port , Proto => 'tcp' , Timeout => 2);
+                # Check connection
+                if( $socket )
+                {
+                        #print "Port $port is open.\n" ;
+                        $socket->close();
+                        exit( 0 );
+                }       
+                else
+                {
+                #print "Port $port is closed or filtered.\n" ;
+                exit( 1 );
+                }
+__HERE__
+                if [ $? -eq 0 ]
+                then
+                echo "Telnet is working"
+                else
+                echo "Telnet is not working, please check network"
+                fi
+#End of port checking section
+	
+
+	fi
+else
+echo "BESClient is not installed"
+
+mkdir /tmp/BASclient
+cd /tmp/BASclient
+wget https://129.39.145.249/repo/INSTTOOLS/tools/RH7/BASclient/BESAgent-9.2.7.53-rhe5.x86_64.rpm --no-check-certificate
+wget https://129.39.145.249/repo/INSTTOOLS/tools/RH7/BASclient/actionsite.afxm --no-check-certificate
+wget https://129.39.145.249/repo/INSTTOOLS/tools/RH7/BASclient/besclient.config --no-check-certificate
+
+cd /tmp/BASclient
+rpm -Uvh BESAgent-9.2.7.53-rhe5.x86_64.rpm
+sleep 5
+mkdir /var/opt/BESClient/
+mkdir /etc/opt/BESClient
+cd /tmp/BASclient
+cp actionsite.afxm /etc/opt/BESClient/actionsite.afxm
+cp besclient.config /var/opt/BESClient/besclient.config
+chmod 600 /etc/opt/BESClient/actionsite.afxm 
+chmod 600 /var/opt/BESClient/besclient.config
+/etc/init.d/besclient start
+
+
+
+fi
+
+#echo "----------------------------------"
+
+
+
+
+
+echo "=================================="
+elif [ -f /etc/SuSE-release ]; then
+echo "=================================="
+#Put code for Suse here
+echo `hostname`
+echo `ifconfig -a | grep inet | grep 'inet addr' | head -2`
+if [ -f /opt/BESClient/bin/BESClient ]; then
+        echo "Besclient is installed in the system"
+        if ps ax | grep -v grep | grep BESClient> /dev/null; then
+        echo "Besclient is up and running"
+	#Port checking section start
+                perl -  <<'__HERE__'
+                use IO::Socket;
+                # flush the print buffer immediately
+                $| = 1;
+                # Get command line parameters
+                $target = "129.39.145.237" ;
+                $port = 52311 ;
+                # Connect to host/port
+                $socket = IO::Socket::INET->new(PeerAddr => $target , PeerPort => $port , Proto => 'tcp' , Timeout => 2);
+                # Check connection
+                if( $socket )
+                {
+                        #print "Port $port is open.\n" ;
+                        $socket->close();
+                        exit( 0 );
+                }       
+                else
+                {
+                #print "Port $port is closed or filtered.\n" ;
+                exit( 1 );
+                }
+__HERE__
+                if [ $? -eq 0 ]
+                then
+                echo "Telnet is working"
+                else
+                echo "Telnet is not working, please check network"
+                fi
+#End of port checking section
+        
+
+	else
+        echo "Besclient is not running"
+        /etc/init.d/besclient start
+                if [ $? -eq 0 ]; then
+                echo "Besclient has been started"
+                else
+                echo "Besclient CANNOT be started"
+                fi
+        sleep 5
+	#Port checking section start
+                perl -  <<'__HERE__'
+                use IO::Socket;
+                # flush the print buffer immediately
+                $| = 1;
+                # Get command line parameters
+                $target = "129.39.145.237" ;
+                $port = 52311 ;
+                # Connect to host/port
+                $socket = IO::Socket::INET->new(PeerAddr => $target , PeerPort => $port , Proto => 'tcp' , Timeout => 2);
+                # Check connection
+                if( $socket )
+                {
+                        #print "Port $port is open.\n" ;
+                        $socket->close();
+                        exit( 0 );
+                }       
+                else
+                {
+                #print "Port $port is closed or filtered.\n" ;
+                exit( 1 );
+                }
+__HERE__
+                if [ $? -eq 0 ]
+                then
+                echo "Telnet is working"
+                else
+                echo "Telnet is not working, please check network"
+                fi
+#End of port checking section
+        
+
+	fi
+else
+echo "BESClient is not installed"
+
+fi
+
+
+
+
+
+
+#echo "----------------------------------"
+
+
+
+
+
+
+echo "=================================="
+elif [ `uname` == 'AIX' ]; then
+#Put code for AIX here
+echo "=================================="
+echo `hostname`
+echo `ifconfig -a | grep inet | head -3`
+
+if [ -f /opt/BESClient/bin/BESClient ]; then
+        echo "Besclient is installed in the system"
+        if ps ax | grep -v grep | grep BESClient> /dev/null; then
+        echo "Besclient is up and running"
+#Port checking section start
+                perl -  <<'__HERE__'
+		use IO::Socket;
+		# flush the print buffer immediately
+		$| = 1;
+		# Get command line parameters
+		$target = "129.39.145.237" ;
+		$port = 52311 ;
+		# Connect to host/port
+		$socket = IO::Socket::INET->new(PeerAddr => $target , PeerPort => $port , Proto => 'tcp' , Timeout => 2);
+		# Check connection
+		if( $socket )
+		{
+     			#print "Port $port is open.\n" ;
+     			$socket->close();
+     			exit( 0 );
+		}	
+		else
+		{
+    		#print "Port $port is closed or filtered.\n" ;
+    		exit( 1 );
+		}
+__HERE__
+		if [ $? -eq 0 ]
+	        then
+        	echo "Telnet is working"
+        	else
+        	echo "Telnet is not working, please check network"
+        	fi
+#End of port checking section
+        else
+        echo "Besclient is not running"
+        /opt/BESClient/bin/BESClient
+                if [ $? -eq 0 ]; then
+                echo "Besclient has been started"
+                else
+                echo "Besclient CANNOT be started"
+                fi
+        sleep 5
+       #Port checking section start
+                perl -  <<'__HERE__'
+                use IO::Socket;
+                # flush the print buffer immediately
+                $| = 1;
+                # Get command line parameters
+                $target = "129.39.145.237" ;
+                $port = 52311 ;
+                # Connect to host/port
+                $socket = IO::Socket::INET->new(PeerAddr => $target , PeerPort => $port , Proto => 'tcp' , Timeout => 2);
+                # Check connection
+                if( $socket )
+                {
+                        #print "Port $port is open.\n" ;
+                        $socket->close();
+                        exit( 0 );
+                }       
+                else
+                {
+                #print "Port $port is closed or filtered.\n" ;
+                exit( 1 );
+                }
+__HERE__
+                if [ $? -eq 0 ]
+                then
+                echo "Telnet is working"
+                else
+                echo "Telnet is not working, please check network"
+                fi
+#End of port checking section
+ 
+
+
+	fi
+else
+echo "BESClient is not installed"
+
+fi
+
+
+
+#echo "----------------------------------"
+
+
+
+
+echo "=================================="
+
+
+
+
+
+
+
+
+else
+echo "=================================="
+#Put code for other UNIX
+echo `hostname`
+
+echo "----------------------------------"
+
+
+echo "=================================="
+fi
+
+

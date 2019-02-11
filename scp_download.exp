@@ -1,0 +1,99 @@
+#!/usr/bin/expect
+set timeout 600
+set user [lindex $argv 0]
+set password [lindex $argv 1]
+set host [lindex $argv 2]
+set filename [lindex $argv 3]
+#set filename_local [lindex $argv 4]
+#set prompt "(%|#|:|>|\\$ )"
+
+#Information banner
+send_user "\n\n########### Copying ${filename} from host : ${host} ###########\n"
+
+#Starting SSH connection
+spawn scp  ${user}@${host}:/home/${user}/${filename} /home/eldar/script/downloads/${filename}.${host}
+
+#Check if connection works or not
+expect {
+		timeout { send_user "\nFailed connect to the host"; exit 1 }
+
+		eof { send_user "\nSSH failure for ${host}"}
+
+#Sending password
+
+		"*assword:" {
+			send "${password}\r"
+		expect 100%
+		sleep 1
+		exit
+		}
+}
+
+#Doing SUDO
+#expect -re $prompt 
+#                 send "scp /home/eldar/script/uploads/${filename} ${user}@${host}:/home/${user}/${filename_rmt}\r"
+#	       	expect {
+ #                        "*assword*" {
+  #                                     send "${password}\r"   
+   #                                   }
+    #                    }
+
+#Sending commands
+#expect { 
+#		 "*#" {
+#				send "scp /home/eldar/script/uploads/${filename} ${user}@${host}:/home/${user}/${filename_rmt}\r"
+#				sleep 3
+#	
+#			expect "*#"		 {
+#					 send "exit\r" 
+#					  	 }	
+#			}
+
+
+
+#		"*:" {
+#				send "${command}\r"
+ #                        sleep 3
+                                        
+  #                      expect "*:"		 {
+                                 
+   #                                      send "exit\r" 
+    #                               		 }    
+#			}
+
+
+
+ #               "*$" {
+#				send "${command}\r"
+ #                        sleep 3
+
+#                        expect "*$"              {
+
+ #                                        send "exit\r"
+  #                                               }
+   #                     }
+
+
+
+		
+#	}
+#Exiting from servers
+#			expect { 
+#				"*@*" { 
+#					send "exit\r"
+ #					}
+#				"*:" { 
+#					send "exit\r"
+#				     }
+
+#				"logout" { 
+ #               			send "exit\r" 
+  #      			     }
+
+#				"*$" {
+ #                                       send "exit\r"
+  #                                   }
+
+
+#}
+
