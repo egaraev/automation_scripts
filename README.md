@@ -1,5 +1,5 @@
 # automation_script
-Set of menu driven shell scripts for some repeating tasks for unix servers
+Set of menu driven shell scripts for some repeating tasks for unix servers. Used for the environment, where you cannot use SSH keys exchanged among servers, so i used expect for sending username and password to all those servers. Has basic functional for running commands on remote servers, upload run and download results of any shell script and etc. 
 
 Menu Options
 
